@@ -71,10 +71,51 @@ function getLineIndexDown(editor: vscode.TextEditor, hungry: boolean): vscode.Po
     return new vscode.Position(lineIdx, idxInLine);
 }
 
-function travelPara(editor: vscode.TextEditor, moveDown: boolean, hungry: boolean, select: boolean) {
-    const moveTo = moveDown ? getLineIndexDown(editor, hungry) : getLineIndexUp(editor, hungry);
+function travelPara(editor: vscode.TextEditor, moveForward: boolean, hungry: boolean, select: boolean) {
+    const moveTo = moveForward ? getLineIndexDown(editor, hungry) : getLineIndexUp(editor, hungry);
     editor.selection = new vscode.Selection(select ? editor.selection.anchor : moveTo, moveTo);
     editor.revealRange(new vscode.Range(moveTo, moveTo));
+}
+
+function isAlpha(ch: string) {
+    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch == '_';
+}
+
+function travelWord(editor: vscode.TextEditor, moveForward: boolean, select: boolean) {
+    const document = editor.document;
+
+    // If outside of word, first skip to the first alpha character,
+    // possibly moving to the next line
+    let lineIdx = editor.selection.active.line;
+    let charIdx = editor.selection.active.character;
+    let currLine = document.lineAt(lineIdx).text;
+    const lastLineIdx = document.lineCount - 1;
+    
+    if (!isAlpha(currLine.charAt(charIdx)) || charIdx === currLine.length) { 
+        for (;;) {
+            while (charIdx < currLine.length && !isAlpha(currLine.charAt(charIdx))) {
+                charIdx++;
+            }
+
+            // If in word or end of buffer is reached, break
+            if (isAlpha(currLine.charAt(charIdx)) || lineIdx === lastLineIdx) {
+                break;
+            }
+
+            lineIdx++;
+            charIdx = 0;
+            currLine = document.lineAt(lineIdx).text;
+        }
+    }
+
+    // Now move to the end of a current character
+    while (charIdx < currLine.length && isAlpha(currLine.charAt(charIdx))) {
+        charIdx++;
+    }
+
+    const pos = new vscode.Position(lineIdx, charIdx);
+    editor.selection = new vscode.Selection(select ? editor.selection.anchor : pos, pos);
+    editor.revealRange(new vscode.Range(pos, pos));
 }
 
 export function activate(context: vscode.ExtensionContext)  {
@@ -112,9 +153,18 @@ export function activate(context: vscode.ExtensionContext)  {
         travelPara(editor, false, true, true);
     });
 
+    var jumpWordRight = vscode.commands.registerTextEditorCommand("test1.wordRightHungry", function(editor) {
+        travelWord(editor, true, false);
+    });
+
+    var jumpWordLeft = vscode.commands.registerTextEditorCommand("test1.wordLeftHungry", function(editor) {
+        travelWord(editor, false, false);
+    });
+
     context.subscriptions.push(
         jumpDown, jumpDownSelect, jumpDownHungry, jumpDownSelectHungry,
-        jumpUp, jumpUpSelect, jumpUpHungry, jumpUpSelectHungry);
+        jumpUp, jumpUpSelect, jumpUpHungry, jumpUpSelectHungry,
+        jumpWordRight);
 }
 
 export function deactivate() {

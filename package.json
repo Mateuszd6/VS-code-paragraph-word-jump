@@ -17,7 +17,8 @@
         "onCommand:test1.paraUp",
         "onCommand:test1.paraUpSelect",
         "onCommand:test1.paraUpHungry",
-        "onCommand:test1.paraUpSelectHungry"
+        "onCommand:test1.paraUpSelectHungry",
+		"onCommand:test1.wordRightHungry"
     ],
     "browser": "./dist/web/extension.js",
     "contributes": {
@@ -53,7 +54,11 @@
             {
                 "command": "test1.paraUpSelectHungry",
                 "title": "Select prev paragraph (hungry)"
-            }
+            },
+			{
+				"command": "test1.wordRightHungry",
+                "title": "Next word (hungry)"
+			}
         ]
     },
     "scripts": {
