@@ -1,65 +1,72 @@
-# test1 README
+# Hungry Movement for VS Code
 
-This is the README for your extension "test1". After writing up a brief description, we recommend including the following sections.
+This is my simple extension which allows for quick code navigation. Since VS
+code does not support block movement I wanted to add those ("forward-paragraph"
+in Emacs or square brackets in Vim). However, I've found that some editors jump
+much further than others (examples below). Hence, paragraph jump is available in
+two options; hungry and normal. You can choose whichever you like. For the same
+reason this package also provides function that jump or delete next/previous
+word that move more aggresively than their default counterpars provided in VS
+Code.
 
-## Features
+## Provided commands
+```
+hungry-movement.paraDown
+hungry-movement.paraDownSelect
+hungry-movement.paraDownHungry
+hungry-movement.paraDownSelectHungry
+hungry-movement.paraUp
+hungry-movement.paraUpSelect
+hungry-movement.paraUpHungry
+hungry-movement.paraUpSelectHungry
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+hungry-movement.wordRightHungry
+hungry-movement.wordRightSelectHungry
+hungry-movement.wordLeftHungry
+hungry-movement.wordLeftSelectHungry
+hungry-movement.wordLeftKillHungry
+hungry-movement.wordRightKillHungry
+```
 
-For example if there is an image subfolder under your extension project workspace:
+Functions for moving up/down a paragraph come with both options default and
+hungry (the latter have a "Hungry" suffix). Each function (expect kill) have
+it's select counterpar (usually, when you have wordRight binded to <ctrl+left>
+you will have wordRightSelect binded to <ctrl+shift+left>). Of course word
+movement functions come only in "hungry" mode, because their non-hungry
+counterparts are already provided by VS Code. You have to map the provided
+function to your desired keybindings.
 
-\!\[feature X\]\(images/feature-x.png\)
+## Block travel
+```
+-- normal: --
+|
+This is
+a text island.
+|
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
-## Requirements
+|
+This is
+a second text island.
+|
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+-- hungry: --
+|
+This is
+a text island.
+|
 
-## Extension Settings
+                      <-- (won't stop here)
+This is
+a second text island.
+|
+```
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## Word travel or deletion
+```
+normal: |this| is|->|text|
+hungry: |this| is|->text|
+                    ^
+                    |
+              a difference
+```
