@@ -5,12 +5,11 @@ function isAlpha(ch: string) {
     return ((ch >= 'a' && ch <= 'z') ||
             (ch >= 'A' && ch <= 'Z') ||
             (ch >= '0' && ch <= '9') ||
-            ch == '_');
+            ch === '_');
 }
 
-function getLineIndexUp(editor: vscode.TextEditor, hungry: boolean): vscode.Position {
-    const document = editor.document;
-    let lineIdx = editor.selection.active.line;
+function getLineIndexUp(document: vscode.TextDocument, sel: vscode.Selection, hungry: boolean): vscode.Position {
+    let lineIdx = sel.active.line;
 
     // If we are on the whitespace line, but text island starts in the prev line and we
     // are in hungry more, then we want to skip the island only, so it's easiest to just
@@ -42,10 +41,9 @@ function getLineIndexUp(editor: vscode.TextEditor, hungry: boolean): vscode.Posi
     return new vscode.Position(lineIdx, 0);
 }
 
-function getLineIndexDown(editor: vscode.TextEditor, hungry: boolean): vscode.Position {
-    const document = editor.document;
+function getLineIndexDown(document: vscode.TextDocument, sel: vscode.Selection, hungry: boolean): vscode.Position {
     const lastLineIdx = document.lineCount - 1;
-    let lineIdx = editor.selection.active.line;
+    let lineIdx = sel.active.line;
 
     // If we are on the whitespace line, but text island starts in the next line and we
     // are in hungry more, then we want to skip the island only, so it's easiest to just
@@ -115,7 +113,6 @@ function getWordPosForward(document: vscode.TextDocument, startPos: vscode.Posit
 }
 
 function getWordPosBackward(document: vscode.TextDocument, startPos: vscode.Position) {
-
     // If outside of word, first skip to the first alpha character,
     // possibly moving to the next line
     let lineIdx = startPos.line;
@@ -148,37 +145,76 @@ function getWordPosBackward(document: vscode.TextDocument, startPos: vscode.Posi
 }
 
 function travelPara(editor: vscode.TextEditor, moveForward: boolean, hungry: boolean, select: boolean) {
-    const moveTo = (moveForward
-                    ? getLineIndexDown(editor, hungry)
-                    : getLineIndexUp(editor, hungry));
-    editor.selection = new vscode.Selection(select ? editor.selection.anchor : moveTo, moveTo);
-    editor.revealRange(new vscode.Range(moveTo, moveTo));
+    const document = editor.document;
+    const sels: vscode.Selection[] = [];
+    editor.selections.forEach(sel => {
+        const moveTo = (moveForward
+                        ? getLineIndexDown(document, sel, hungry)
+                        : getLineIndexUp(document, sel, hungry));
+
+        sels.push(new vscode.Selection(select ? sel.anchor : moveTo, moveTo));
+    });
+
+    editor.selections = sels;
+    if (editor.selections.length === 1) {
+        const toReveal = moveForward ? sels[0].end : sels[0].start;
+        editor.revealRange(new vscode.Range(toReveal, toReveal)); 
+    }
 }
 
 function travelWord(editor: vscode.TextEditor, moveForward: boolean, select: boolean, kill: boolean) {
     const document = editor.document;
-    const startPos = editor.selection.active;
-    const pos = (moveForward
-                 ? getWordPosForward(document, startPos)
-                 : getWordPosBackward(document, startPos));
 
-    // Avoid deleting when range is empty, because it records undo
-    if (kill && (pos.compareTo(startPos) !== 0)) {
+    const sels: vscode.Selection[] = [];
+    const kills: vscode.Range[] = [];
+    let somethingToKill = true; // TODO: set to false
+
+    editor.selections.forEach(sel => {
+        const startPos = sel.active;
+        const pos = (moveForward
+                    ? getWordPosForward(document, startPos)
+                    : getWordPosBackward(document, startPos));
+
+        // Avoid deleting when range is empty, because it records undo
+        somethingToKill = somethingToKill || pos.compareTo(startPos) !== 0;
+
+        if (kill) {
+            const rangeToDelete = (moveForward
+                                   ? new vscode.Range(startPos, pos)
+                                   : new vscode.Range(pos, startPos));
+            kills.push(rangeToDelete);
+        } else {
+            sels.push(new vscode.Selection(select ? sel.anchor : pos, pos));
+            // editor.revealRange(new vscode.Range(pos, pos));
+        }
+    });
+
+    if (kill && somethingToKill) {
         editor.edit((eb: vscode.TextEditorEdit) => {
-            let rangeToDelete = (moveForward
-                                 ? new vscode.Range(startPos, pos)
-                                 : new vscode.Range(pos, startPos));
-            eb.delete(rangeToDelete);
+            kills.forEach((range: vscode.Range) => {
+                eb.delete(range);
+            });
         }).then((succ: boolean) => {
             if (succ) {
-                const endPos = moveForward ? startPos : pos;
-                editor.selection = new vscode.Selection(endPos, endPos);
-                editor.revealRange(new vscode.Range(endPos, endPos));
+                const s: vscode.Selection[] = [];
+                kills.forEach((range: vscode.Range) => {
+                    s.push(new vscode.Selection(range.start, range.start));
+                });
+
+                editor.selections = s;
+                if (editor.selections.length === 1) {
+                    editor.revealRange(new vscode.Range(sels[0].end, sels[0].end)); 
+                }
             }
+        }).then(undefined, err => {
+            vscode.window.showErrorMessage("ERROR" + String(err));
         });
     } else {
-        editor.selection = new vscode.Selection(select ? editor.selection.anchor : pos, pos);
-        editor.revealRange(new vscode.Range(pos, pos));
+        editor.selections = sels;
+        if (editor.selections.length === 1) {
+            const toReveal = moveForward ? sels[0].end : sels[0].start;
+            editor.revealRange(new vscode.Range(toReveal, toReveal)); 
+        }
     }
 }
 
