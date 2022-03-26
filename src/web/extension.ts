@@ -151,13 +151,31 @@ function travelPara(editor: vscode.TextEditor, moveForward: boolean, hungry: boo
     editor.revealRange(new vscode.Range(moveTo, moveTo));
 }
 
-function travelWord(editor: vscode.TextEditor, moveForward: boolean, select: boolean) {
+function travelWord(editor: vscode.TextEditor, moveForward: boolean, select: boolean, kill: boolean) {
     const document = editor.document;
+    const startPos = editor.selection.active;
     const pos = (moveForward
-                 ? getWordPosForward(document, editor.selection.active) 
-                 : getWordPosBackward(document, editor.selection.active));
-    editor.selection = new vscode.Selection(select ? editor.selection.anchor : pos, pos);
-    editor.revealRange(new vscode.Range(pos, pos));
+                 ? getWordPosForward(document, startPos) 
+                 : getWordPosBackward(document, startPos));
+
+    // Avoid deleting when range is empty, because it records undo
+    if (kill && (pos.compareTo(startPos) !== 0)) { 
+        editor.edit((eb: vscode.TextEditorEdit) => {
+            let rangeToDelete = (moveForward
+                                 ? new vscode.Range(startPos, pos)
+                                 : new vscode.Range(pos, startPos));
+            eb.delete(rangeToDelete);
+        }).then((succ: boolean) => {
+            if (succ) {
+                const endPos = moveForward ? startPos : pos;
+                editor.selection = new vscode.Selection(endPos, endPos);
+                editor.revealRange(new vscode.Range(endPos, endPos));
+            }
+        });
+    } else {
+        editor.selection = new vscode.Selection(select ? editor.selection.anchor : pos, pos);
+        editor.revealRange(new vscode.Range(pos, pos));
+    }
 }
 
 export function activate(context: vscode.ExtensionContext)  {
@@ -196,19 +214,27 @@ export function activate(context: vscode.ExtensionContext)  {
     });
 
     var jumpWordRight = vscode.commands.registerTextEditorCommand("test1.wordRightHungry", function(editor) {
-        travelWord(editor, true, false);
+        travelWord(editor, true, false, false);
     });
 
     var jumpWordRightSelect = vscode.commands.registerTextEditorCommand("test1.wordRightSelectHungry", function(editor) {
-        travelWord(editor, true, true);
+        travelWord(editor, true, true, false);
     });
 
     var jumpWordLeft = vscode.commands.registerTextEditorCommand("test1.wordLeftHungry", function(editor) {
-        travelWord(editor, false, false);
+        travelWord(editor, false, false, false);
     });
 
     var jumpWordLeftSelect = vscode.commands.registerTextEditorCommand("test1.wordLeftSelectHungry", function(editor) {
-        travelWord(editor, false, true);
+        travelWord(editor, false, true, false);
+    });
+
+    var killWordLeft = vscode.commands.registerTextEditorCommand("test1.wordLeftKillHungry", function(editor) {
+        travelWord(editor, false, false, true);
+    });
+
+    var killWordRight = vscode.commands.registerTextEditorCommand("test1.wordRightKillHungry", function(editor) {
+        travelWord(editor, true, false, true);
     });
 
     context.subscriptions.push(
@@ -217,7 +243,8 @@ export function activate(context: vscode.ExtensionContext)  {
         jumpUp, jumpUpSelect, 
         jumpUpHungry, jumpUpSelectHungry,
         jumpWordRight, jumpWordRightSelect, 
-        jumpWordLeft, jumpWordLeftSelect);
+        jumpWordLeft, jumpWordLeftSelect,
+        killWordLeft, killWordRight);
 }
 
 export function deactivate() {

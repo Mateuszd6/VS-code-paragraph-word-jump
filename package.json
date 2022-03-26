@@ -21,7 +21,9 @@
         "onCommand:test1.wordRightHungry",
         "onCommand:test1.wordRightSelectHungry",
         "onCommand:test1.wordLeftHungry",
-        "onCommand:test1.wordLeftSelectHungry"
+        "onCommand:test1.wordLeftSelectHungry",
+        "onCommand:test1.wordLeftKillHungry",
+        "onCommand:test1.wordRightKillHungry"
     ],
     "browser": "./dist/web/extension.js",
     "contributes": {
@@ -73,6 +75,14 @@
             {
                 "command": "test1.wordLeftSelectHungry",
                 "title": "Select previous word (hungry)"
+            },
+            {
+                "command": "test1.wordLeftKillHungry",
+                "title": "Kill word left (hungry)"
+            },
+            {
+                "command": "test1.wordRightKillHungry",
+                "title": "Kill word right (hungry)"
             }
         ]
     },
