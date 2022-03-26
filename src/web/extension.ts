@@ -1,5 +1,10 @@
 import * as vscode from 'vscode';
 
+// TODO: Figure out how to recognize alpha numerics correctly in vscode
+function isAlpha(ch: string) {
+    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch == '_';
+}
+
 function getLineIndexUp(editor: vscode.TextEditor, hungry: boolean): vscode.Position {
     const document = editor.document;
     let lineIdx = editor.selection.active.line;
@@ -71,40 +76,29 @@ function getLineIndexDown(editor: vscode.TextEditor, hungry: boolean): vscode.Po
     return new vscode.Position(lineIdx, idxInLine);
 }
 
-function travelPara(editor: vscode.TextEditor, moveForward: boolean, hungry: boolean, select: boolean) {
-    const moveTo = moveForward ? getLineIndexDown(editor, hungry) : getLineIndexUp(editor, hungry);
-    editor.selection = new vscode.Selection(select ? editor.selection.anchor : moveTo, moveTo);
-    editor.revealRange(new vscode.Range(moveTo, moveTo));
-}
-
-function isAlpha(ch: string) {
-    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch == '_';
-}
-
-function travelWord(editor: vscode.TextEditor, moveForward: boolean, select: boolean) {
-    const document = editor.document;
+function getWordPosForward(document: vscode.TextDocument, startPos: vscode.Position) {
 
     // If outside of word, first skip to the first alpha character,
     // possibly moving to the next line
-    let lineIdx = editor.selection.active.line;
-    let charIdx = editor.selection.active.character;
+    let lineIdx = startPos.line;
+    let charIdx = startPos.character;
     let currLine = document.lineAt(lineIdx).text;
     const lastLineIdx = document.lineCount - 1;
-    
-    if (!isAlpha(currLine.charAt(charIdx)) || charIdx === currLine.length) { 
+
+    if (charIdx === currLine.length || !isAlpha(currLine.charAt(charIdx))) { 
         for (;;) {
             while (charIdx < currLine.length && !isAlpha(currLine.charAt(charIdx))) {
                 charIdx++;
             }
 
             // If in word or end of buffer is reached, break
-            if (isAlpha(currLine.charAt(charIdx)) || lineIdx === lastLineIdx) {
+            if (lineIdx === lastLineIdx || isAlpha(currLine.charAt(charIdx))) {
                 break;
             }
 
             lineIdx++;
-            charIdx = 0;
             currLine = document.lineAt(lineIdx).text;
+            charIdx = 0;
         }
     }
 
@@ -113,7 +107,55 @@ function travelWord(editor: vscode.TextEditor, moveForward: boolean, select: boo
         charIdx++;
     }
 
-    const pos = new vscode.Position(lineIdx, charIdx);
+    return new vscode.Position(lineIdx, charIdx);
+}
+
+function getWordPosBackward(document: vscode.TextDocument, startPos: vscode.Position) {
+
+    // If outside of word, first skip to the first alpha character,
+    // possibly moving to the next line
+    let lineIdx = startPos.line;
+    let charIdx = startPos.character;
+    let currLine = document.lineAt(lineIdx).text;
+
+    if (charIdx === 0 || !isAlpha(currLine.charAt(charIdx - 1))) { 
+        for (;;) {
+            while (charIdx > 0 && !isAlpha(currLine.charAt(charIdx - 1))) {
+                charIdx--;
+            }
+
+            // If in word or end of buffer is reached, break
+            if (lineIdx === 0 || isAlpha(currLine.charAt(charIdx - 1))) {
+                break;
+            }
+
+            lineIdx--;
+            currLine = document.lineAt(lineIdx).text;
+            charIdx = currLine.length;
+        }
+    }
+
+    // Now move to the end of a current character
+    while (charIdx > 0 && isAlpha(currLine.charAt(charIdx - 1))) {
+        charIdx--;
+    }
+
+    return new vscode.Position(lineIdx, charIdx);
+}
+
+function travelPara(editor: vscode.TextEditor, moveForward: boolean, hungry: boolean, select: boolean) {
+    const moveTo = (moveForward 
+                    ? getLineIndexDown(editor, hungry) 
+                    : getLineIndexUp(editor, hungry));
+    editor.selection = new vscode.Selection(select ? editor.selection.anchor : moveTo, moveTo);
+    editor.revealRange(new vscode.Range(moveTo, moveTo));
+}
+
+function travelWord(editor: vscode.TextEditor, moveForward: boolean, select: boolean) {
+    const document = editor.document;
+    const pos = (moveForward
+                 ? getWordPosForward(document, editor.selection.active) 
+                 : getWordPosBackward(document, editor.selection.active));
     editor.selection = new vscode.Selection(select ? editor.selection.anchor : pos, pos);
     editor.revealRange(new vscode.Range(pos, pos));
 }
@@ -157,14 +199,25 @@ export function activate(context: vscode.ExtensionContext)  {
         travelWord(editor, true, false);
     });
 
+    var jumpWordRightSelect = vscode.commands.registerTextEditorCommand("test1.wordRightSelectHungry", function(editor) {
+        travelWord(editor, true, true);
+    });
+
     var jumpWordLeft = vscode.commands.registerTextEditorCommand("test1.wordLeftHungry", function(editor) {
         travelWord(editor, false, false);
     });
 
+    var jumpWordLeftSelect = vscode.commands.registerTextEditorCommand("test1.wordLeftSelectHungry", function(editor) {
+        travelWord(editor, false, true);
+    });
+
     context.subscriptions.push(
-        jumpDown, jumpDownSelect, jumpDownHungry, jumpDownSelectHungry,
-        jumpUp, jumpUpSelect, jumpUpHungry, jumpUpSelectHungry,
-        jumpWordRight);
+        jumpDown, jumpDownSelect, 
+        jumpDownHungry, jumpDownSelectHungry,
+        jumpUp, jumpUpSelect, 
+        jumpUpHungry, jumpUpSelectHungry,
+        jumpWordRight, jumpWordRightSelect, 
+        jumpWordLeft, jumpWordLeftSelect);
 }
 
 export function deactivate() {

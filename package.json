@@ -18,7 +18,10 @@
         "onCommand:test1.paraUpSelect",
         "onCommand:test1.paraUpHungry",
         "onCommand:test1.paraUpSelectHungry",
-		"onCommand:test1.wordRightHungry"
+        "onCommand:test1.wordRightHungry",
+        "onCommand:test1.wordRightSelectHungry",
+        "onCommand:test1.wordLeftHungry",
+        "onCommand:test1.wordLeftSelectHungry"
     ],
     "browser": "./dist/web/extension.js",
     "contributes": {
@@ -41,24 +44,36 @@
             },
             {
                 "command": "test1.paraUp",
-                "title": "Prev paragraph"
+                "title": "Previous paragraph"
             },
             {
                 "command": "test1.paraUpSelect",
-                "title": "Select prev paragraph"
+                "title": "Select previous paragraph"
             },
             {
                 "command": "test1.paraUpHungry",
-                "title": "Prev paragraph (hungry)"
+                "title": "Previous paragraph (hungry)"
             },
             {
                 "command": "test1.paraUpSelectHungry",
-                "title": "Select prev paragraph (hungry)"
+                "title": "Select previous paragraph (hungry)"
             },
-			{
-				"command": "test1.wordRightHungry",
+            {
+                "command": "test1.wordRightHungry",
                 "title": "Next word (hungry)"
-			}
+            },
+            {
+                "command": "test1.wordRightSelectHungry",
+                "title": "Select next word (hungry)"
+            },
+            {
+                "command": "test1.wordLeftHungry",
+                "title": "Previous word (hungry)"
+            },
+            {
+                "command": "test1.wordLeftSelectHungry",
+                "title": "Select previous word (hungry)"
+            }
         ]
     },
     "scripts": {
