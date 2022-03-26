@@ -1,55 +1,85 @@
 {
-	"name": "test1",
-	"displayName": "test1",
-	"description": "test no. 1",
-	"version": "0.0.1",
-	"engines": {
-		"vscode": "^1.65.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-        "onCommand:test1.helloWorld",
-		"onCommand:test1.travelParagraphDown"
-	],
-	"browser": "./dist/web/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "test1.helloWorld",
-				"title": "Hello World"
-			},
-			{
-                "command": "test1.travelParagraphDown",
+    "name": "test1",
+    "displayName": "test1",
+    "description": "test no. 1",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.65.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:test1.paraDown",
+        "onCommand:test1.paraDownSelect",
+        "onCommand:test1.paraDownHungry",
+        "onCommand:test1.paraDownSelectHungry",
+        "onCommand:test1.paraUp",
+        "onCommand:test1.paraUpSelect",
+        "onCommand:test1.paraUpHungry",
+        "onCommand:test1.paraUpSelectHungry"
+    ],
+    "browser": "./dist/web/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "test1.paraDown",
                 "title": "Next paragraph"
+            },
+            {
+                "command": "test1.paraDownSelect",
+                "title": "Select next paragraph"
+            },
+            {
+                "command": "test1.paraDownHungry",
+                "title": "Next paragraph (hungry)"
+            },
+            {
+                "command": "test1.paraDownSelectHungry",
+                "title": "Select next paragraph (hungry)"
+            },
+            {
+                "command": "test1.paraUp",
+                "title": "Prev paragraph"
+            },
+            {
+                "command": "test1.paraUpSelect",
+                "title": "Select prev paragraph"
+            },
+            {
+                "command": "test1.paraUpHungry",
+                "title": "Prev paragraph (hungry)"
+            },
+            {
+                "command": "test1.paraUpSelectHungry",
+                "title": "Select prev paragraph (hungry)"
             }
-		]
-	},
-	"scripts": {
-		"test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
-		"pretest": "npm run compile-web",
-		"vscode:prepublish": "npm run package-web",
-		"compile-web": "webpack",
-		"watch-web": "webpack --watch",
-		"package-web": "webpack --mode production --devtool hidden-source-map",
-		"lint": "eslint src --ext ts",
-		"run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ."
-	},
-	"devDependencies": {
-		"@types/vscode": "^1.65.0",
-		"@types/mocha": "^9.1.0",
-		"eslint": "^8.11.0",
-		"@typescript-eslint/eslint-plugin": "^5.16.0",
-		"@typescript-eslint/parser": "^5.16.0",
-		"mocha": "^9.2.2",
-		"typescript": "^4.5.5",
-		"@vscode/test-web": "^0.0.24",
-		"ts-loader": "^9.2.8",
-		"webpack": "^5.70.0",
-		"webpack-cli": "^4.9.2",
-		"@types/webpack-env": "^1.16.3",
-		"assert": "^2.0.0",
-		"process": "^0.11.10"
-	}
+        ]
+    },
+    "scripts": {
+        "test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
+        "pretest": "npm run compile-web",
+        "vscode:prepublish": "npm run package-web",
+        "compile-web": "webpack",
+        "watch-web": "webpack --watch",
+        "package-web": "webpack --mode production --devtool hidden-source-map",
+        "lint": "eslint src --ext ts",
+        "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ."
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.65.0",
+        "@types/mocha": "^9.1.0",
+        "eslint": "^8.11.0",
+        "@typescript-eslint/eslint-plugin": "^5.16.0",
+        "@typescript-eslint/parser": "^5.16.0",
+        "mocha": "^9.2.2",
+        "typescript": "^4.5.5",
+        "@vscode/test-web": "^0.0.24",
+        "ts-loader": "^9.2.8",
+        "webpack": "^5.70.0",
+        "webpack-cli": "^4.9.2",
+        "@types/webpack-env": "^1.16.3",
+        "assert": "^2.0.0",
+        "process": "^0.11.10"
+    }
 }
