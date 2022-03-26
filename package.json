@@ -9,6 +9,12 @@
     "categories": [
         "Other"
     ],
+	"license": "MIT",
+    "icon": "images/icon.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Mateuszd6/VS-code-paragraph-word-jump.git"
+    }
     "activationEvents": [
         "onCommand:hungry-movement.paraDown",
         "onCommand:hungry-movement.paraDownSelect",

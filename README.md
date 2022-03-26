@@ -1,12 +1,12 @@
 # Hungry Paragraph/Word movement for VS Code
 This is my simple extension which allows for quick code navigation. Since VS
-code does not support paragraph movement I wanted to add those ("forward-paragraph"
-in Emacs or square brackets in Vim). However, I've found that some editors jump
-much further than others (examples below). Hence, paragraph jump is available in
-two options; hungry and normal. You can choose whichever you like. For the same
-reason this package also provides function that jump or delete next/previous
-word that move more aggresively than their default counterpars provided in VS
-Code.
+code does not support paragraph movement I wanted to add those
+("forward-paragraph" in Emacs or square brackets in Vim). However, I've found
+that some editors jump much further than others (examples below). Hence,
+paragraph jump is available in two options; hungry and normal. You can choose
+whichever you like. For the same reason this package also provides function that
+jump or delete next/previous word that move more aggresively than their default
+counterpars provided in VS Code.
 
 ## Provided commands
 ```
@@ -69,3 +69,5 @@ hungry: |this| is|->text|
                     |
               a difference
 ```
+
+## Acknowledgments
