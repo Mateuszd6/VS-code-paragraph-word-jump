@@ -1,7 +1,6 @@
-# Hungry Movement for VS Code
-
+# Hungry Paragraph/Word movement for VS Code
 This is my simple extension which allows for quick code navigation. Since VS
-code does not support block movement I wanted to add those ("forward-paragraph"
+code does not support paragraph movement I wanted to add those ("forward-paragraph"
 in Emacs or square brackets in Vim). However, I've found that some editors jump
 much further than others (examples below). Hence, paragraph jump is available in
 two options; hungry and normal. You can choose whichever you like. For the same
@@ -36,7 +35,7 @@ movement functions come only in "hungry" mode, because their non-hungry
 counterparts are already provided by VS Code. You have to map the provided
 function to your desired keybindings.
 
-## Block travel
+## Paragraph travel
 ```
 -- normal: --
 |
