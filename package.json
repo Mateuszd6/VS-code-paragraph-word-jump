@@ -1,6 +1,6 @@
 {
-    "name": "test1",
-    "displayName": "test1",
+    "name": "hungry-movement",
+    "displayName": "hungry-movement",
     "description": "test no. 1",
     "version": "0.0.1",
     "engines": {
@@ -10,78 +10,78 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:test1.paraDown",
-        "onCommand:test1.paraDownSelect",
-        "onCommand:test1.paraDownHungry",
-        "onCommand:test1.paraDownSelectHungry",
-        "onCommand:test1.paraUp",
-        "onCommand:test1.paraUpSelect",
-        "onCommand:test1.paraUpHungry",
-        "onCommand:test1.paraUpSelectHungry",
-        "onCommand:test1.wordRightHungry",
-        "onCommand:test1.wordRightSelectHungry",
-        "onCommand:test1.wordLeftHungry",
-        "onCommand:test1.wordLeftSelectHungry",
-        "onCommand:test1.wordLeftKillHungry",
-        "onCommand:test1.wordRightKillHungry"
+        "onCommand:hungry-movement.paraDown",
+        "onCommand:hungry-movement.paraDownSelect",
+        "onCommand:hungry-movement.paraDownHungry",
+        "onCommand:hungry-movement.paraDownSelectHungry",
+        "onCommand:hungry-movement.paraUp",
+        "onCommand:hungry-movement.paraUpSelect",
+        "onCommand:hungry-movement.paraUpHungry",
+        "onCommand:hungry-movement.paraUpSelectHungry",
+        "onCommand:hungry-movement.wordRightHungry",
+        "onCommand:hungry-movement.wordRightSelectHungry",
+        "onCommand:hungry-movement.wordLeftHungry",
+        "onCommand:hungry-movement.wordLeftSelectHungry",
+        "onCommand:hungry-movement.wordLeftKillHungry",
+        "onCommand:hungry-movement.wordRightKillHungry"
     ],
     "browser": "./dist/web/extension.js",
     "contributes": {
         "commands": [
             {
-                "command": "test1.paraDown",
+                "command": "hungry-movement.paraDown",
                 "title": "Next paragraph"
             },
             {
-                "command": "test1.paraDownSelect",
+                "command": "hungry-movement.paraDownSelect",
                 "title": "Select next paragraph"
             },
             {
-                "command": "test1.paraDownHungry",
+                "command": "hungry-movement.paraDownHungry",
                 "title": "Next paragraph (hungry)"
             },
             {
-                "command": "test1.paraDownSelectHungry",
+                "command": "hungry-movement.paraDownSelectHungry",
                 "title": "Select next paragraph (hungry)"
             },
             {
-                "command": "test1.paraUp",
+                "command": "hungry-movement.paraUp",
                 "title": "Previous paragraph"
             },
             {
-                "command": "test1.paraUpSelect",
+                "command": "hungry-movement.paraUpSelect",
                 "title": "Select previous paragraph"
             },
             {
-                "command": "test1.paraUpHungry",
+                "command": "hungry-movement.paraUpHungry",
                 "title": "Previous paragraph (hungry)"
             },
             {
-                "command": "test1.paraUpSelectHungry",
+                "command": "hungry-movement.paraUpSelectHungry",
                 "title": "Select previous paragraph (hungry)"
             },
             {
-                "command": "test1.wordRightHungry",
+                "command": "hungry-movement.wordRightHungry",
                 "title": "Next word (hungry)"
             },
             {
-                "command": "test1.wordRightSelectHungry",
+                "command": "hungry-movement.wordRightSelectHungry",
                 "title": "Select next word (hungry)"
             },
             {
-                "command": "test1.wordLeftHungry",
+                "command": "hungry-movement.wordLeftHungry",
                 "title": "Previous word (hungry)"
             },
             {
-                "command": "test1.wordLeftSelectHungry",
+                "command": "hungry-movement.wordLeftSelectHungry",
                 "title": "Select previous word (hungry)"
             },
             {
-                "command": "test1.wordLeftKillHungry",
+                "command": "hungry-movement.wordLeftKillHungry",
                 "title": "Kill word left (hungry)"
             },
             {
-                "command": "test1.wordRightKillHungry",
+                "command": "hungry-movement.wordRightKillHungry",
                 "title": "Kill word right (hungry)"
             }
         ]
