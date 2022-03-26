@@ -30,7 +30,7 @@ hungry-movement.wordRightKillHungry
 
 Functions for moving up/down a paragraph come with both options default and
 hungry (the latter have a "Hungry" suffix). Each function (expect kill) have
-it's select counterpar (usually, when you have wordRight binded to <ctrl+left>
+it's select counterpar (usually, when you have wordLeft binded to <ctrl+left>
 you will have wordRightSelect binded to <ctrl+shift+left>). Of course word
 movement functions come only in "hungry" mode, because their non-hungry
 counterparts are already provided by VS Code. You have to map the provided
