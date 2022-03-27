@@ -3,6 +3,7 @@
     "displayName": "Faster paragraph/word movement",
     "description": "Faster paragraph/word movement for VS code",
     "version": "0.0.1",
+    "publisher": "mateusz-d-421",
     "engines": {
         "vscode": "^1.65.0"
     },
