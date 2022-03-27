@@ -16,6 +16,11 @@
     ],
 	"license": "MIT",
     "icon": "images/icon.png",
+    "homepage": "https://github.com/Mateuszd6/VS-code-paragraph-word-jump/blob/main/README.md",
+    "bugs": {
+      "url": "https://github.com/Mateuszd6/VS-code-paragraph-word-jump/issues",
+      "email": "dudzinskimat@outlook.com"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/Mateuszd6/VS-code-paragraph-word-jump.git"
