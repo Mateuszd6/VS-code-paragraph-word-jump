@@ -69,5 +69,3 @@ hungry: |this| is|->text|
                     |
               a difference
 ```
-
-## Acknowledgments
