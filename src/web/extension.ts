@@ -158,13 +158,12 @@ function travelPara(editor: vscode.TextEditor, moveForward: boolean, hungry: boo
     editor.selections = sels;
     if (editor.selections.length === 1) {
         const toReveal = moveForward ? sels[0].end : sels[0].start;
-        editor.revealRange(new vscode.Range(toReveal, toReveal)); 
+        editor.revealRange(new vscode.Range(toReveal, toReveal));
     }
 }
 
 function travelWord(editor: vscode.TextEditor, moveForward: boolean, select: boolean, kill: boolean) {
     const document = editor.document;
-
     const sels: vscode.Selection[] = [];
     const kills: vscode.Range[] = [];
     let somethingToKill = true; // TODO: set to false
@@ -183,9 +182,9 @@ function travelWord(editor: vscode.TextEditor, moveForward: boolean, select: boo
                                    ? new vscode.Range(startPos, pos)
                                    : new vscode.Range(pos, startPos));
             kills.push(rangeToDelete);
-        } else {
+        } 
+        else {
             sels.push(new vscode.Selection(select ? sel.anchor : pos, pos));
-            // editor.revealRange(new vscode.Range(pos, pos));
         }
     });
 
@@ -203,17 +202,18 @@ function travelWord(editor: vscode.TextEditor, moveForward: boolean, select: boo
 
                 editor.selections = s;
                 if (editor.selections.length === 1) {
-                    editor.revealRange(new vscode.Range(sels[0].end, sels[0].end)); 
+                    editor.revealRange(new vscode.Range(s[0].end, s[0].end));
                 }
             }
         }).then(undefined, err => {
-            vscode.window.showErrorMessage("ERROR" + String(err));
+            vscode.window.showErrorMessage("ERROR: " + String(err));
         });
-    } else {
+    } 
+    else {
         editor.selections = sels;
         if (editor.selections.length === 1) {
             const toReveal = moveForward ? sels[0].end : sels[0].start;
-            editor.revealRange(new vscode.Range(toReveal, toReveal)); 
+            editor.revealRange(new vscode.Range(toReveal, toReveal));
         }
     }
 }
@@ -222,47 +222,33 @@ export function activate(context: vscode.ExtensionContext)  {
     // TODO: log something?
     const exportFuncs = [
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.paraDown", 
-            function(editor) { travelPara(editor, true, false, false) }),
+            "faster-para-word-movement.paraDown", (ed) => travelPara(ed, true, false, false)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.paraDownSelect", 
-            function(editor) { travelPara(editor, true, false, true) }),
+            "faster-para-word-movement.paraDownSelect", (ed) => travelPara(ed, true, false, true)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.paraDownHungry", 
-            function(editor) { travelPara(editor, true, true, false) }),
+            "faster-para-word-movement.paraDownHungry", (ed) => travelPara(ed, true, true, false)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.paraDownSelectHungry", 
-            function(editor) { travelPara(editor, true, true, true) }),
+            "faster-para-word-movement.paraDownSelectHungry", (ed) => travelPara(ed, true, true, true)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.paraUp", 
-            function(editor) { travelPara(editor, false, false, false) }),
+            "faster-para-word-movement.paraUp", (ed) => travelPara(ed, false, false, false)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.paraUpSelect", 
-            function(editor) { travelPara(editor, false, false, true) }),
+            "faster-para-word-movement.paraUpSelect", (ed) => travelPara(ed, false, false, true)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.paraUpHungry", 
-            function(editor) { travelPara(editor, false, true, false) }),
+            "faster-para-word-movement.paraUpHungry", (ed) => travelPara(ed, false, true, false)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.paraUpSelectHungry", 
-            function(editor) { travelPara(editor, false, true, true) }),
+            "faster-para-word-movement.paraUpSelectHungry", (ed) => travelPara(ed, false, true, true)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.wordRightHungry", 
-            function(editor) { travelWord(editor, true, false, false) }),
+            "faster-para-word-movement.wordRightHungry", (ed) => travelWord(ed, true, false, false)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.wordRightSelectHungry", 
-            function(editor) { travelWord(editor, true, true, false) }),
+            "faster-para-word-movement.wordRightSelectHungry", (ed) => travelWord(ed, true, true, false)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.wordLeftHungry", 
-            function(editor) { travelWord(editor, false, false, false) }),
+            "faster-para-word-movement.wordLeftHungry", (ed) => travelWord(ed, false, false, false)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.wordLeftSelectHungry", 
-            function(editor) { travelWord(editor, false, true, false) }),
+            "faster-para-word-movement.wordLeftSelectHungry", (ed) => travelWord(ed, false, true, false)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.wordLeftKillHungry", 
-            function(editor) { travelWord(editor, false, false, true) }),
+            "faster-para-word-movement.wordLeftKillHungry", (ed) => travelWord(ed, false, false, true)),
         vscode.commands.registerTextEditorCommand(
-            "hungry-movement.wordRightKillHungry", 
-            function(editor) { travelWord(editor, true, false, true) })
+            "faster-para-word-movement.wordRightKillHungry", (ed) => travelWord(ed, true, false, true))
     ];
 
     context.subscriptions.push(...exportFuncs);

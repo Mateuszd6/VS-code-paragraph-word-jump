@@ -1,30 +1,30 @@
-# Hungry Paragraph/Word movement for VS Code
+# Faster Paragraph/Word movement for VS Code
 This is my simple extension which allows for quick code navigation. Since VS
 code does not support paragraph movement I wanted to add those
 ("forward-paragraph" in Emacs or square brackets in Vim). However, I've found
 that some editors jump much further than others (examples below). Hence,
-paragraph jump is available in two options; hungry and normal. You can choose
+paragraph jump is available in two options; "hungry" and normal. You can choose
 whichever you like. For the same reason this package also provides function that
 jump or delete next/previous word that move more aggresively than their default
 counterpars provided in VS Code.
 
 ## Provided commands
 ```
-hungry-movement.paraDown
-hungry-movement.paraDownSelect
-hungry-movement.paraDownHungry
-hungry-movement.paraDownSelectHungry
-hungry-movement.paraUp
-hungry-movement.paraUpSelect
-hungry-movement.paraUpHungry
-hungry-movement.paraUpSelectHungry
+faster-para-word-movement.paraDown
+faster-para-word-movement.paraDownSelect
+faster-para-word-movement.paraDownHungry
+faster-para-word-movement.paraDownSelectHungry
+faster-para-word-movement.paraUp
+faster-para-word-movement.paraUpSelect
+faster-para-word-movement.paraUpHungry
+faster-para-word-movement.paraUpSelectHungry
 
-hungry-movement.wordRightHungry
-hungry-movement.wordRightSelectHungry
-hungry-movement.wordLeftHungry
-hungry-movement.wordLeftSelectHungry
-hungry-movement.wordLeftKillHungry
-hungry-movement.wordRightKillHungry
+faster-para-word-movement.wordRightHungry
+faster-para-word-movement.wordRightSelectHungry
+faster-para-word-movement.wordLeftHungry
+faster-para-word-movement.wordLeftSelectHungry
+faster-para-word-movement.wordLeftKillHungry
+faster-para-word-movement.wordRightKillHungry
 ```
 
 Functions for moving up/down a paragraph come with both options default and
