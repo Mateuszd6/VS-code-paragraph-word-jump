@@ -166,7 +166,7 @@ function travelWord(editor: vscode.TextEditor, moveForward: boolean, select: boo
     const document = editor.document;
     const sels: vscode.Selection[] = [];
     const kills: vscode.Range[] = [];
-    let somethingToKill = true; // TODO: set to false
+    let somethingToKill = false;
 
     editor.selections.forEach(sel => {
         const startPos = sel.active;
